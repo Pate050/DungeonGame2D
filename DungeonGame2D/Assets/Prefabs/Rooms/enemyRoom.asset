@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: debfed4eb8662874491e139ad36c1bf4, type: 3}
+  m_Name: enemyRoom
+  m_EditorClassIdentifier: 
+  propsToPlace:
+  - {fileID: 11400000, guid: 4a8c1665a79154f448ced67bccf4906e, type: 2}
+  - {fileID: 11400000, guid: cec9b10b499249140a267d475c8a8958, type: 2}
+  - {fileID: 11400000, guid: 05b265a57b65cbf4088abed2638be459, type: 2}
+  - {fileID: 11400000, guid: deab2841eb5180147b9e0024353a6934, type: 2}
+  CrateQuantityMin: 1
+  CrateQuantityMax: 1
+  TreasureQuantityMin: 0
+  TreasureQuantityMax: 1
+  ObstacleQuantityMin: 2
+  ObstacleQuantityMax: 3
