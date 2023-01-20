@@ -19,4 +19,4 @@ MonoBehaviour:
   TreasureQuantityMin: 1
   TreasureQuantityMax: 1
   ObstacleQuantityMin: 2
-  ObstacleQuantityMax: 3
+  ObstacleQuantityMax: 4

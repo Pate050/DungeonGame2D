@@ -20,7 +20,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 05b265a57b65cbf4088abed2638be459, type: 2}
   CrateQuantityMin: 1
   CrateQuantityMax: 1
-  TreasureQuantityMin: 1
-  TreasureQuantityMax: 2
+  TreasureQuantityMin: 2
+  TreasureQuantityMax: 3
   ObstacleQuantityMin: 2
   ObstacleQuantityMax: 3
