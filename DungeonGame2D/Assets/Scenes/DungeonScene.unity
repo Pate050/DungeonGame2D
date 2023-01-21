@@ -15984,7 +15984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 0}
-  playerPrefab: {fileID: 5022122756842830974, guid: f3ba5280e60860d418858ad769c7f20c, type: 3}
+  playerPrefab: {fileID: 1686186876220140717, guid: 2d11efeecf5b7104a8b4b6561bfc9c15, type: 3}
   playerRoomIndex: 0
   roomEnemiesCount: 
   showGizmo: 0

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,47 +15,58 @@ public enum PlayerState
 
 public class PlayerMovement : MonoBehaviour
 {
+
     public PlayerState currentState;
-    public float speed;
-    private Rigidbody2D myRigidbody;
-    private Vector3 change;
+
+    public float MOVEMENT_BASE_SPEED = 10.0f;
+
+    public float movementSpeed;
+    private Rigidbody2D rb;
+    private Vector2 movementDirection;
     private DungeonData dungeonData;
+    private Animator anim;
+    private SpriteRenderer sprr;
 
     // Start is called before the first frame update
     void Start(){
         currentState = PlayerState.walk;
-        myRigidbody = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponentInChildren<Animator>();
+        sprr = GetComponentInChildren<SpriteRenderer>();
+        if (anim.gameObject.activeSelf)
+        {
+            anim.Play("CharacterIdleRight");
+        }
+ 
     }
 
     // Update is called once per frame
-    void FixedUpdate(){
-        change = Vector3.zero;
-        change.x = Input.GetAxisRaw("Horizontal");
-        change.y = Input.GetAxisRaw("Vertical");
+    void Update(){
+        ProcessInputs();
+        Move();
+        anim.SetFloat("Speed", movementSpeed);
 
-        UpdateAnimationAndMove();
+        bool flipped = movementDirection.x < 0;
+        
     }
 
-    void UpdateAnimationAndMove()
+    private void Move()
     {
-        if (change != Vector3.zero)
+        rb.velocity = movementDirection * movementSpeed * MOVEMENT_BASE_SPEED;
+        if (movementDirection.x > 0.1)
         {
-            MoveCharacter();
+            sprr.flipX = false;
+        }
+        else if (movementDirection.x < -0.1)
+        {
+            sprr.flipX = true;
         }
     }
 
-
-    void MoveCharacter()
+    void ProcessInputs()
     {
-        change.Normalize();
-        myRigidbody.MovePosition(
-            transform.position + change * speed * Time.deltaTime
-            );
+        movementDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        movementSpeed = Mathf.Clamp(movementDirection.magnitude, 0.0f, 1.0f);
+        movementDirection.Normalize();
     }
-
-    public void PlayerToStartRoom()
-    {
-        myRigidbody.MovePosition(dungeonData.PlayerStart);
-    }
-
 }
