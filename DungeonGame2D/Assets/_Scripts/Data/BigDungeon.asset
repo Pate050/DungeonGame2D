@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5e9ca45ae01874697f0755850e3ca5, type: 3}
   m_Name: BigDungeon
   m_EditorClassIdentifier: 
-  iterations: 50
-  walkLength: 30
+  iterations: 22
+  walkLength: 22
   startRandomlyEachIteration: 1
