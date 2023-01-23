@@ -15,9 +15,12 @@ MonoBehaviour:
   propsToPlace:
   - {fileID: 11400000, guid: 489ba4ccffe1fd4458ebb69c3d702d48, type: 2}
   - {fileID: 11400000, guid: deab2841eb5180147b9e0024353a6934, type: 2}
-  CrateQuantityMin: 1
-  CrateQuantityMax: 1
+  - {fileID: 11400000, guid: cec9b10b499249140a267d475c8a8958, type: 2}
+  CrateQuantityMin: 3
+  CrateQuantityMax: 5
   TreasureQuantityMin: 1
   TreasureQuantityMax: 1
-  ObstacleQuantityMin: 2
-  ObstacleQuantityMax: 3
+  ObstacleQuantityMin: 0
+  ObstacleQuantityMax: 0
+  TorchQuantityMin: 3
+  TorchQuantityMax: 5

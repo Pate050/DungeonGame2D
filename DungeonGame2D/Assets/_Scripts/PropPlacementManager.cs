@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
@@ -50,54 +48,47 @@ public class PropPlacementManager : MonoBehaviour
             {
                 Debug.Log("Error: RoomTypeNull");
                 continue;
-            }      
-            
-            List<Prop> propsToPlace = roomSettings.propsToPlace;
-            
-            //Place props place props in the corners
-            List<Prop> cornerProps = propsToPlace.Where(x => x.Corner).ToList();
-            if (cornerProps.Count > 0)
-            {
-                PlaceCornerProps(room, cornerProps);
             }
-            //Place props near LEFT wall
-            List<Prop> leftWallProps = propsToPlace
-            .Where(x => x.NearWallLeft)
-            .OrderByDescending(x => x.PropSize.x * x.PropSize.y)
-            .ToList();
 
-            PlaceProps(room, leftWallProps, room.NearWallTilesLeft, PlacementOriginCorner.BottomLeft);
+            //Uutta
+            List<Prop> roomProps = roomSettings.propsToPlace;
+            List<Prop> obstcleProps = new List<Prop>();
+            List<Prop> crateProps = new List<Prop>();
+            List<Prop> treasureProps = new List<Prop>();
+            List<Prop> torchProps = new List<Prop>();
+            foreach (Prop prop in roomProps)
+            {
+                if (prop.propType == "obstacle")
+                {
+                    obstcleProps.Add(prop);
+                }
+                else if (prop.propType == "crate")
+                {
+                    crateProps.Add(prop);
+                }
+                else if (prop.propType == "treasure")
+                {
+                    treasureProps.Add(prop);
+                }
+                else if (prop.propType == "torch")
+                {
+                    torchProps.Add(prop);
+                }
+            }
+            int obstacleQuantity
+                    = UnityEngine.Random.Range(roomSettings.ObstacleQuantityMin, roomSettings.ObstacleQuantityMax + 1);
+            int crateQuantity
+                    = UnityEngine.Random.Range(roomSettings.CrateQuantityMin, roomSettings.CrateQuantityMax + 1);
+            int treasureQuantity
+                    = UnityEngine.Random.Range(roomSettings.TreasureQuantityMin, roomSettings.TreasureQuantityMax + 1);
+            int torchQuantity
+                    = UnityEngine.Random.Range(roomSettings.TorchQuantityMin, roomSettings.TorchQuantityMax + 1);
+            PlacePropOfType(room, obstcleProps, obstacleQuantity);
+            PlacePropOfType(room, treasureProps, treasureQuantity);
+            PlacePropOfType(room, crateProps, crateQuantity);
+            PlacePropOfType(room, torchProps, torchQuantity);
 
-            //Place props near RIGHT wall
-            List<Prop> rightWallProps = propsToPlace
-            .Where(x => x.NearWallRight)
-            .OrderByDescending(x => x.PropSize.x * x.PropSize.y)
-            .ToList();
 
-            PlaceProps(room, rightWallProps, room.NearWallTilesRight, PlacementOriginCorner.TopRight);
-
-            //Place props near UP wall
-            List<Prop> topWallProps = propsToPlace
-            .Where(x => x.NearWallUP)
-            .OrderByDescending(x => x.PropSize.x * x.PropSize.y)
-            .ToList();
-
-            PlaceProps(room, topWallProps, room.NearWallTilesUp, PlacementOriginCorner.TopLeft);
-
-            //Place props near DOWN wall
-            List<Prop> downWallProps = propsToPlace
-            .Where(x => x.NearWallDown)
-            .OrderByDescending(x => x.PropSize.x * x.PropSize.y)
-            .ToList();
-
-            PlaceProps(room, downWallProps, room.NearWallTilesDown, PlacementOriginCorner.BottomLeft);
-
-            //Place inner props
-            List<Prop> innerProps = propsToPlace
-                .Where(x => x.Inner)
-                .OrderByDescending(x => x.PropSize.x * x.PropSize.y)
-                .ToList();
-            PlaceProps(room, innerProps, room.InnerTiles, PlacementOriginCorner.BottomLeft);
         }
 
         //OnFinished?.Invoke();
@@ -105,14 +96,51 @@ public class PropPlacementManager : MonoBehaviour
 
     }
 
+    private void PlacePropOfType(Room room, List<Prop> props, int quantity)
+    {
+        for (int i = 0; i < quantity; i++)
+
+        {
+            if (props.Count == 0)
+            {
+                continue;
+            }
+            Prop prop = props[UnityEngine.Random.Range(0, props.Count)];
+            HashSet<Vector2Int> possiblePositions = new HashSet<Vector2Int>();
+            if (prop.Corner)
+            {
+                possiblePositions.UnionWith(room.CornerTiles);
+            }
+            if (prop.NearWallDown)
+            {
+                possiblePositions.UnionWith(room.NearWallTilesDown);
+            }
+            if (prop.NearWallLeft)
+            {
+                possiblePositions.UnionWith(room.NearWallTilesLeft);
+            }
+            if (prop.NearWallRight)
+            {
+                possiblePositions.UnionWith(room.NearWallTilesRight);
+            }
+            if (prop.NearWallUP)
+            {
+                possiblePositions.UnionWith(room.NearWallTilesUp);
+            }
+            if (prop.Inner)
+            {
+                possiblePositions.UnionWith(room.InnerTiles);
+            }
+            possiblePositions.ExceptWith(room.PropPositions);
+            possiblePositions.ExceptWith(dungeonData.Path);
+            List<Vector2Int> availablePositions = possiblePositions.OrderBy(x => Guid.NewGuid()).ToList();
+            TryPlacingPropBruteForce(room, prop, availablePositions, PlacementOriginCorner.BottomLeft);
+        }
+    }
+
     public void RunEvent()
     {
         OnFinished?.Invoke();
-    }
-    private IEnumerator TutorialCoroutine(Action code)
-    {
-        yield return new WaitForSeconds(3);
-        code();
     }
 
     /// <summary>
@@ -203,12 +231,6 @@ public class PropPlacementManager : MonoBehaviour
                         room.PropPositions.Add(pos);
                         propPlacements.Add(pos);
 
-                    }
-
-                    //Deal with groups
-                    if (propToPlace.PlaceAsGroup)
-                    {
-                        PlaceGroupObject(room, position, propToPlace, 1);
                     }
                     return true;
                 }
@@ -308,10 +330,6 @@ public class PropPlacementManager : MonoBehaviour
                 {
                     propPlacements.Add(cornerTile);
                         PlacePropGameObjectAt(room, cornerTile, propToPlace);
-                    if (propToPlace.PlaceAsGroup)
-                    {
-                        PlaceGroupObject(room, cornerTile, propToPlace, 2);
-                    }
                 }
             }
             else
@@ -321,51 +339,7 @@ public class PropPlacementManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Helps to find free spaces around the groupOriginPosition to place a prop as a group
-    /// </summary>
-    /// <param name="room"></param>
-    /// <param name="groupOriginPosition"></param>
-    /// <param name="propToPlace"></param>
-    /// <param name="searchOffset">The search offset ex 1 = we will check all tiles withing the distance of 1 unity away from origin position</param>
-    private void PlaceGroupObject(
-        Room room, Vector2Int groupOriginPosition, Prop propToPlace, int searchOffset)
-    {
-        //*Can work poorely when placing bigger props as groups
-
-        //calculate how many elements are in the group -1 that we have placed in the center
-        int count = UnityEngine.Random.Range(propToPlace.GroupMinCount, propToPlace.GroupMaxCount) - 1;
-        count = Mathf.Clamp(count, 0, 8);
-
-        //find the available spaces around the center point.
-        //we use searchOffset to limit the distance between those points and the center point
-        List<Vector2Int> availableSpaces = new List<Vector2Int>();
-        for (int xOffset = -searchOffset; xOffset <= searchOffset; xOffset++)
-        {
-            for (int yOffset = -searchOffset; yOffset <= searchOffset; yOffset++)
-            {
-                Vector2Int tempPos = groupOriginPosition + new Vector2Int(xOffset, yOffset);
-                if (room.FloorTiles.Contains(tempPos) &&
-                    !dungeonData.Path.Contains(tempPos) &&
-                    !room.PropPositions.Contains(tempPos))
-                {
-                    availableSpaces.Add(tempPos);
-                }
-            }
-        }
-
-        //shuffle the list
-        availableSpaces.OrderBy(x => Guid.NewGuid());
-
-        //place the props (as many as we want or if there is less space fill all the available spaces)
-        int tempCount = count < availableSpaces.Count ? count : availableSpaces.Count;
-        for (int i = 0; i < tempCount; i++)
-        {
-            PlacePropGameObjectAt(room, availableSpaces[i], propToPlace);
-        }
-
-    }
-
+   
     /// <summary>
     /// Place a prop as a new GameObject at a specified position
     /// </summary>
@@ -413,8 +387,33 @@ public class PropPlacementManager : MonoBehaviour
             Animator animator = prop.GetComponentInChildren<Animator>();
             if(propToPlace.name == "torch")
             {
-                animator.SetBool("isTorch", true);
-            }else if (propToPlace.name == "bossRoomTorch")
+                if (CheckIfWall(placementPostion, Vector2Int.up))
+                {
+                    animator.SetBool("isTorch", true);
+                }else if (CheckIfWall(placementPostion, Vector2Int.left))
+                {
+                    animator.SetBool("isTorchLeft", true);
+                }
+                else if (CheckIfWall(placementPostion, Vector2Int.right))
+                {
+                    animator.SetBool("isTorchRight", true);
+                }
+                else if (CheckIfWall(placementPostion, Vector2Int.down))
+                {
+                    animator.SetBool("isTorchDown", true);
+                }
+                else
+                {
+                    // Se on generoitunut v‰‰rin niin poistetaan sprite
+                    collider.enabled = false;
+                    propSpriteRenderer.enabled = false;
+                    return prop;
+
+                }
+                collider.enabled = false;
+
+            }
+            else if (propToPlace.name == "bossRoomTorch")
             {
                 animator.SetBool("isBossRoomTorch", true);
                 light.color = new Color32(225, 130, 112,225);
@@ -427,6 +426,13 @@ public class PropPlacementManager : MonoBehaviour
         propPlacements.Add(placementPostion);
         room.PropObjectReferences.Add(prop);
         return prop;
+    }
+
+    private bool CheckIfWall(Vector2Int placementPostion, Vector2Int direction)
+    {
+        if (dungeonData.FloorTiles.Contains(placementPostion + direction))
+            return false;
+        return true;
     }
 }
 

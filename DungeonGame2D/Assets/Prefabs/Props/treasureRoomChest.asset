@@ -21,13 +21,8 @@ MonoBehaviour:
   idleAnimation: {fileID: 0}
   propType: treasure
   Corner: 1
-  NearWallUP: 0
-  NearWallDown: 0
-  NearWallRight: 0
-  NearWallLeft: 0
+  NearWallUP: 1
+  NearWallDown: 1
+  NearWallRight: 1
+  NearWallLeft: 1
   Inner: 0
-  PlacementQuantityMin: 1
-  PlacementQuantityMax: 1
-  PlaceAsGroup: 0
-  GroupMinCount: 1
-  GroupMaxCount: 1

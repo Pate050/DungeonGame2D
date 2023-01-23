@@ -19,15 +19,10 @@ MonoBehaviour:
   isLight: 1
   isLit: 0
   idleAnimation: {fileID: 0}
-  propType: obstacle
+  propType: torch
   Corner: 1
-  NearWallUP: 0
-  NearWallDown: 0
-  NearWallRight: 0
-  NearWallLeft: 0
+  NearWallUP: 1
+  NearWallDown: 1
+  NearWallRight: 1
+  NearWallLeft: 1
   Inner: 1
-  PlacementQuantityMin: 1
-  PlacementQuantityMax: 1
-  PlaceAsGroup: 0
-  GroupMinCount: 1
-  GroupMaxCount: 1

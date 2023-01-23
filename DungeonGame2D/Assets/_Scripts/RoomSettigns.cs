@@ -21,4 +21,10 @@ public class RoomSettigns : ScriptableObject
     public int ObstacleQuantityMin = 1;
     [Min(0)]
     public int ObstacleQuantityMax = 1;
+
+    [Min(0)]
+    public int TorchQuantityMin = 1;
+    [Min(0)]
+    public int TorchQuantityMax = 1;
+
 }

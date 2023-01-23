@@ -18,5 +18,7 @@ MonoBehaviour:
   CrateQuantityMax: 0
   TreasureQuantityMin: 1
   TreasureQuantityMax: 1
-  ObstacleQuantityMin: 2
-  ObstacleQuantityMax: 4
+  ObstacleQuantityMin: 0
+  ObstacleQuantityMax: 0
+  TorchQuantityMin: 6
+  TorchQuantityMax: 8

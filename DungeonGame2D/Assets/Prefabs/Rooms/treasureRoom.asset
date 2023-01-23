@@ -18,9 +18,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: deab2841eb5180147b9e0024353a6934, type: 2}
   - {fileID: 11400000, guid: cec9b10b499249140a267d475c8a8958, type: 2}
   - {fileID: 11400000, guid: 05b265a57b65cbf4088abed2638be459, type: 2}
-  CrateQuantityMin: 1
-  CrateQuantityMax: 1
+  CrateQuantityMin: 4
+  CrateQuantityMax: 8
   TreasureQuantityMin: 2
   TreasureQuantityMax: 3
-  ObstacleQuantityMin: 2
-  ObstacleQuantityMax: 3
+  ObstacleQuantityMin: 0
+  ObstacleQuantityMax: 0
+  TorchQuantityMin: 3
+  TorchQuantityMax: 5
