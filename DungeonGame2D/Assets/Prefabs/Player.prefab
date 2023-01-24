@@ -619,6 +619,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7377505720774889851}
   - component: {fileID: 758752000663715753}
+  - component: {fileID: 2685432428676973881}
   m_Layer: 0
   m_Name: Slash
   m_TagString: Untagged
@@ -693,6 +694,60 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!60 &2685432428676973881
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7112059516480686617}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2, y: 1}
+    newSize: {x: 2, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.113392554, y: 0.5270629}
+      - {x: -0.0979212, y: 0.5270629}
+      - {x: -0.5247996, y: 0.31411663}
+      - {x: -0.6961976, y: -0.0035405122}
+      - {x: -0.64508665, y: -0.23085955}
+      - {x: -0.039009646, y: -0.021582559}
+      - {x: 0.5984343, y: -0.22281156}
+      - {x: 0.6916872, y: -0.032866616}
+      - {x: 0.53157336, y: 0.31990424}
+  m_UseDelaunayMesh: 0
 --- !u!1 &7817438040734800536
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,7 +772,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7817438040734800536}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.08715578, w: 0.9961947}
   m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -726,7 +781,7 @@ Transform:
   - {fileID: 7377505720774889851}
   m_Father: {fileID: 1686186876220140714}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -10}
 --- !u!114 &7847022476901707991
 MonoBehaviour:
   m_ObjectHideFlags: 0

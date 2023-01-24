@@ -16,10 +16,12 @@ public class Ase : MonoBehaviour
     private Vector2 direction;
     private SpriteRenderer slash;
     private bool hold = false;
+    private Collider2D hitBox;
 
     private void Awake()
     {
         SpriteRenderer[] sprites = GetComponentsInChildren<SpriteRenderer>();
+        hitBox = GetComponentInChildren<Collider2D>();
         foreach (SpriteRenderer sprite in sprites)
         {
             if (sprite.gameObject.name == "Slash")
@@ -91,11 +93,13 @@ public class Ase : MonoBehaviour
         if (slash.enabled)
         { 
             slash.enabled = false;
+            hitBox.enabled = false;
             hold = false;
         }
         else
         {
             slash.enabled = true;
+            hitBox.enabled = true;
             StartCoroutine(Slash());
         }
     }
@@ -106,4 +110,6 @@ public class Ase : MonoBehaviour
         attackBlocked = false;
         slash.enabled = false;
     }
+
+
 }
