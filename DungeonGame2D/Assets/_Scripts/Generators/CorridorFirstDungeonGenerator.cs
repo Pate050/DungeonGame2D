@@ -36,6 +36,11 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
 
     private DungeonData dungeonData;
 
+    private void Start()
+    {
+        RunProceduralGeneration();
+    }
+
     // sähellys loppuu
     protected override void RunProceduralGeneration()
     {
