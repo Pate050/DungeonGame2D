@@ -20,17 +20,31 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 PonterInput => pointerInput;
 
     private Ase ase;
+    private bool holdAttack;
 
     [SerializeField] private InputActionReference movement, attack, pointerPosition;
 
     private void OnEnable()
     {
-        attack.action.performed += PerformAttack;
+        attack.action.canceled += PerformAttack;
+        attack.action.performed += HoldAttack;
     }
 
     private void OnDisable()
     {
-        attack.action.performed -= PerformAttack;
+        attack.action.canceled -= PerformAttack;
+        attack.action.performed -= HoldAttack;
+    }
+
+    private void HoldAttack(InputAction.CallbackContext obj)
+    {
+        if (ase == null)
+        {
+            Debug.LogError("Weapon parent is null", gameObject);
+            return;
+        }
+        ase.HoldAnAttack();
+        holdAttack = true;
     }
 
     private void PerformAttack(InputAction.CallbackContext obj)
@@ -41,6 +55,12 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         ase.PerformAnAttack();
+        StartCoroutine(Delay());
+    }
+    private IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(0.1f);
+        holdAttack = false;
     }
 
     void Awake(){
@@ -59,14 +79,17 @@ public class PlayerMovement : MonoBehaviour
     void Update(){
         ProcessInputs();
         Move();
-        Vector2 direction = (pointerInput - (Vector2)transform.position).normalized;
-        if (direction.x > 0.1)
+        if (holdAttack)
         {
-            sprr.flipX = false;
-        }
-        else if (direction.x < -0.1)
-        {
-            sprr.flipX = true;
+            Vector2 direction = (pointerInput - (Vector2)transform.position).normalized;
+            if (direction.x > 0.1)
+            {
+                sprr.flipX = false;
+            }
+            else if (direction.x < -0.1)
+            {
+                sprr.flipX = true;
+            }
         }
         anim.SetFloat("Speed", movementSpeed);
         
@@ -75,14 +98,18 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {
         rb.velocity = movementDirection * movementSpeed * MOVEMENT_BASE_SPEED;
-        //if (movementDirection.x > 0.1)
-        //{
-        //    sprr.flipX = false;
-        //}
-        //else if (movementDirection.x < -0.1)
-        //{
-        //    sprr.flipX = true;
-        //}
+
+        if (holdAttack == false)
+        {
+            if (movementDirection.x > 0.1)
+            {
+                sprr.flipX = false;
+            }
+            else if (movementDirection.x < -0.1)
+            {
+                sprr.flipX = true;
+            }
+        }
     }
 
     void ProcessInputs()
@@ -90,6 +117,7 @@ public class PlayerMovement : MonoBehaviour
         pointerInput = GetPointerInput();
         ase.PointerPosition = pointerInput;
         movementDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        ase.MovementDirection = movementDirection;
         movementSpeed = Mathf.Clamp(movementDirection.magnitude, 0.0f, 1.0f);
         movementDirection.Normalize();
     }
