@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1686186875520211819}
   - component: {fileID: 1686186875520211818}
   - component: {fileID: 1416460491709788620}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SimpleMan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,7 +115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1686186875815938118}
   - component: {fileID: 1686186875815938119}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -228,7 +228,7 @@ GameObject:
   - component: {fileID: 1686186875816671322}
   - component: {fileID: 1686186875816671323}
   - component: {fileID: 1686186875816671324}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CharCam
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -354,7 +354,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1686186876046434351}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sprites
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -389,7 +389,7 @@ GameObject:
   - component: {fileID: 1686186876220140715}
   - component: {fileID: 1686186876220140716}
   - component: {fileID: 1686186876220140713}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -515,7 +515,7 @@ GameObject:
   - component: {fileID: 1631207050911216352}
   - component: {fileID: 5712591691834548862}
   - component: {fileID: 2495323844126083743}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -620,7 +620,8 @@ GameObject:
   - component: {fileID: 7377505720774889851}
   - component: {fileID: 758752000663715753}
   - component: {fileID: 2685432428676973881}
-  m_Layer: 0
+  - component: {fileID: 5765109546782404928}
+  m_Layer: 7
   m_Name: Slash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -635,8 +636,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7112059516480686617}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.36, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
+  m_LocalPosition: {x: 0.44, y: 0, z: 0}
+  m_LocalScale: {x: 0.7, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 226722115313872509}
@@ -738,16 +739,29 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.113392554, y: 0.5270629}
-      - {x: -0.0979212, y: 0.5270629}
-      - {x: -0.5247996, y: 0.31411663}
-      - {x: -0.6961976, y: -0.0035405122}
-      - {x: -0.64508665, y: -0.23085955}
-      - {x: -0.039009646, y: -0.021582559}
-      - {x: 0.5984343, y: -0.22281156}
-      - {x: 0.6916872, y: -0.032866616}
-      - {x: 0.53157336, y: 0.31990424}
+    - - {x: 0.18464883, y: 0.5364861}
+      - {x: -0.18893395, y: 0.5347068}
+      - {x: -0.56671, y: 0.33612615}
+      - {x: -0.75427467, y: 0.02026695}
+      - {x: -0.47803533, y: -0.27174357}
+      - {x: -0.024675138, y: -0.2164861}
+      - {x: 0.4792681, y: -0.2739946}
+      - {x: 0.7348024, y: -0.015356872}
+      - {x: 0.56211185, y: 0.3239428}
   m_UseDelaunayMesh: 0
+--- !u!114 &5765109546782404928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7112059516480686617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf605a129a309ad49938e5f90b7b82f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
 --- !u!1 &7817438040734800536
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,7 +772,7 @@ GameObject:
   m_Component:
   - component: {fileID: 226722115313872509}
   - component: {fileID: 7847022476901707991}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WeaponParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
