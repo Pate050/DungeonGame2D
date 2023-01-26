@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 6590152745485125727}
   - component: {fileID: 4983160039326018410}
   - component: {fileID: 5395329644367587089}
+  - component: {fileID: 5894433122972805297}
   m_Layer: 6
   m_Name: Prop
   m_TagString: Untagged
@@ -240,3 +241,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   isDead: 0
+--- !u!114 &5894433122972805297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9026139621084661829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fafddea200abcc547aec2b343f696bcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 2100000, guid: 852635fddd2e4d24d8a05a395e177746, type: 2}
+  duration: 0.1

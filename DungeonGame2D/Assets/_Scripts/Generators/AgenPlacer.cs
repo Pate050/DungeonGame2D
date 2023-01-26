@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 public class AgentPlacer : MonoBehaviour
 {
@@ -17,6 +17,8 @@ public class AgentPlacer : MonoBehaviour
     private List<int> roomEnemiesCount;
 
     DungeonData dungeonData;
+
+    public UnityEvent OnFinished;
 
     [SerializeField]
     private bool showGizmo = false;
@@ -64,6 +66,7 @@ public class AgentPlacer : MonoBehaviour
                 dungeonData.PlayerReference = player;
             }
         }
+        OnFinished?.Invoke();
     }
 
     /// <summary>

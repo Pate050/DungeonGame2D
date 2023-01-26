@@ -56,12 +56,6 @@ public class PlayerMovement : MonoBehaviour
         }
         ase.PerformAnAttack();
         holdAttack = false;
-        StartCoroutine(Delay());
-    }
-    private IEnumerator Delay()
-    {
-        yield return new WaitForSeconds(0.1f);
-        //holdAttack = false;
     }
 
     void Awake(){

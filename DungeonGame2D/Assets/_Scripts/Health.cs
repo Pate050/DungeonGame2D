@@ -25,7 +25,11 @@ public class Health : MonoBehaviour
             return;
         if (sender.layer == gameObject.layer)
             return;
-
+        SimpleFlash flash;
+        if (flash = GetComponentInChildren<SimpleFlash>())
+        {
+            flash.Flash();
+        }
         currentHealth -= amount;
 
         if (currentHealth > 0)

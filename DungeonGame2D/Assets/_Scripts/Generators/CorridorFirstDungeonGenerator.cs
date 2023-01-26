@@ -23,7 +23,7 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
     private HashSet<Vector2Int> floorPositions, corridorPositions;
 
     // Uutta sähellystä
-
+    public UnityEvent OnStartedGeneration;
     public UnityEvent OnFinishedRoomGeneration;
 
     public static List<Vector2Int> fourDirections = new()
@@ -38,12 +38,13 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
 
     private void Start()
     {
-        RunProceduralGeneration();
+        GenerateDungeon();
     }
 
     // sähellys loppuu
     protected override void RunProceduralGeneration()
     {
+        OnStartedGeneration?.Invoke();
         dungeonData = FindObjectOfType<DungeonData>();
         if (dungeonData == null)
             dungeonData = gameObject.AddComponent<DungeonData>();
