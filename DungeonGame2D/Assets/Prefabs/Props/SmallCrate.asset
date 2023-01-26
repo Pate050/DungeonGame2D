@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b725340e8738ba4db238fbff56f0629, type: 3}
-  m_Name: SmallCrate
+  m_Name: smallCrate
   m_EditorClassIdentifier: 
   PropSprite: {fileID: 6801152492180024973, guid: a0d3fbbc155eb404a87f827b40a48dfe, type: 3}
   PropSize: {x: 1, y: 1}
-  hasAnimation: 0
-  breakable: 0
+  hasAnimation: 1
+  health: 1
   isLight: 0
-  isLit: 0
   idleAnimation: {fileID: 0}
   propType: crate
   Corner: 1
@@ -26,8 +25,3 @@ MonoBehaviour:
   NearWallRight: 1
   NearWallLeft: 1
   Inner: 0
-  PlacementQuantityMin: 1
-  PlacementQuantityMax: 1
-  PlaceAsGroup: 0
-  GroupMinCount: 1
-  GroupMaxCount: 1

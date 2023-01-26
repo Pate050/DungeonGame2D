@@ -14,9 +14,9 @@ public class Prop : ScriptableObject
 
     public bool hasAnimation;
 
-    public bool breakable;
+    public int health = 0;
 
-    public bool isLight, isLit;
+    public bool isLight;
 
     public Animation idleAnimation;
 

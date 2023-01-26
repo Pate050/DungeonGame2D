@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class Health : MonoBehaviour
 {
     [SerializeField] private int currentHealth, maxHealth;
+    public bool canDie = true;
     public UnityEvent<GameObject> OnHitWithReference, OnDeathWithReference;
     [SerializeField] private bool isDead = false;
 
@@ -18,6 +19,8 @@ public class Health : MonoBehaviour
 
     public void GetHit(int amount, GameObject sender)
     {
+        if (canDie == false)
+            return;
         if (isDead)
             return;
         if (sender.layer == gameObject.layer)
@@ -33,7 +36,24 @@ public class Health : MonoBehaviour
         {
             OnDeathWithReference.Invoke(sender);
             isDead = true;
-            Destroy(gameObject);
+            Animator anim = new Animator();
+            if (anim = GetComponent<Animator>())
+            {
+                Debug.Log("AnimatorFound");
+                anim.SetBool("Smash", true);
+                StartCoroutine(Delay());
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+            
         }
     }
+    private IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(0.4f);
+        Destroy(gameObject);
+    }
+
 }

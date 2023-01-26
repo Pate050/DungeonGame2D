@@ -382,6 +382,8 @@ public class PropPlacementManager : MonoBehaviour
         {
             light.enabled = false;
         }
+        if (propToPlace.health == 0)
+            prop.GetComponentInChildren<Health>().canDie = false;
         if (propToPlace.hasAnimation)
         {
             Animator animator = prop.GetComponentInChildren<Animator>();
@@ -417,6 +419,13 @@ public class PropPlacementManager : MonoBehaviour
             {
                 animator.SetBool("isBossRoomTorch", true);
                 light.color = new Color32(225, 130, 112,225);
+            }else if (propToPlace.name == "smallCrate")
+            {
+                animator.SetBool("isSmallCrate", true);
+            }
+            else if (propToPlace.name == "largeCrate")
+            {
+                animator.SetBool("isLargeCrate", true);
             }
             animator.enabled = true;
         }
