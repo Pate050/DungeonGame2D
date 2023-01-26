@@ -16,12 +16,13 @@ public class Ase : MonoBehaviour
     private Vector2 direction;
     private SpriteRenderer slash;
     private bool hold = false;
-    private Collider2D hitBox;
+
+    public Transform circleOrigin;
+    public float radius;
 
     private void Awake()
     {
         SpriteRenderer[] sprites = GetComponentsInChildren<SpriteRenderer>();
-        hitBox = GetComponentInChildren<Collider2D>();
         foreach (SpriteRenderer sprite in sprites)
         {
             if (sprite.gameObject.name == "Slash")
@@ -81,7 +82,10 @@ public class Ase : MonoBehaviour
     public void PerformAnAttack()
     {
         if (attackBlocked)
+        {
+            hold = false;
             return;
+        }
         animator.SetTrigger("Attack");
         StartCoroutine(Slash());
         attackBlocked = true;
@@ -93,13 +97,12 @@ public class Ase : MonoBehaviour
         if (slash.enabled)
         { 
             slash.enabled = false;
-            hitBox.enabled = false;
             hold = false;
         }
         else
         {
+            DetectColliders();
             slash.enabled = true;
-            hitBox.enabled = true;
             StartCoroutine(Slash());
         }
     }
@@ -111,5 +114,23 @@ public class Ase : MonoBehaviour
         slash.enabled = false;
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Vector3 position = circleOrigin == null ? Vector3.zero : circleOrigin.position;
+        Gizmos.DrawWireSphere(position, radius);
+    }
+
+    public void DetectColliders()
+    {
+        foreach (Collider2D collider in Physics2D.OverlapCircleAll(circleOrigin.position, radius))
+        {
+            Health health;
+            if(health = collider.GetComponent<Health>())
+            {
+                health.GetHit(1, transform.parent.gameObject);
+            }
+        }
+    }
 
 }

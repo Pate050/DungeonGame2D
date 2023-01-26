@@ -36,10 +36,14 @@ public class Health : MonoBehaviour
         {
             OnDeathWithReference.Invoke(sender);
             isDead = true;
-            Animator anim = new Animator();
+            Animator anim;
+            Collider2D coll;
+            if (coll = GetComponent<Collider2D>())
+            {
+                coll.enabled = false;
+            }
             if (anim = GetComponent<Animator>())
             {
-                Debug.Log("AnimatorFound");
                 anim.SetBool("Smash", true);
                 StartCoroutine(Delay());
             }

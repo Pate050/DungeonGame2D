@@ -382,8 +382,14 @@ public class PropPlacementManager : MonoBehaviour
         {
             light.enabled = false;
         }
+
+        // S‰‰det‰‰n HP
+        prop.GetComponentInChildren<Health>().InitializeHealth(propToPlace.health);
         if (propToPlace.health == 0)
             prop.GetComponentInChildren<Health>().canDie = false;
+
+
+        // Asetetaan animaatiot
         if (propToPlace.hasAnimation)
         {
             Animator animator = prop.GetComponentInChildren<Animator>();
