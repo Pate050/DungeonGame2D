@@ -14,6 +14,8 @@ public class Prop : ScriptableObject
 
     public bool hasAnimation;
 
+    public bool hasCollider = true;
+
     public int health = 0;
 
     public bool isLight;

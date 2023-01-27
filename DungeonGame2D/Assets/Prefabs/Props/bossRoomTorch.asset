@@ -15,9 +15,9 @@ MonoBehaviour:
   PropSprite: {fileID: -7443312225144014202, guid: a0d3fbbc155eb404a87f827b40a48dfe, type: 3}
   PropSize: {x: 1, y: 1}
   hasAnimation: 1
-  breakable: 0
+  hasCollider: 1
+  health: 0
   isLight: 1
-  isLit: 0
   idleAnimation: {fileID: 0}
   propType: torch
   Corner: 1

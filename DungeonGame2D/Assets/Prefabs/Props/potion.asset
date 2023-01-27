@@ -15,9 +15,9 @@ MonoBehaviour:
   PropSprite: {fileID: -8258698053525156362, guid: a0d3fbbc155eb404a87f827b40a48dfe, type: 3}
   PropSize: {x: 1, y: 1}
   hasAnimation: 0
-  breakable: 0
+  hasCollider: 1
+  health: 0
   isLight: 0
-  isLit: 0
   idleAnimation: {fileID: 0}
   propType: treasure
   Corner: 0

@@ -15,6 +15,7 @@ MonoBehaviour:
   PropSprite: {fileID: -1034604436700536505, guid: a0d3fbbc155eb404a87f827b40a48dfe, type: 3}
   PropSize: {x: 1, y: 1}
   hasAnimation: 1
+  hasCollider: 1
   health: 2
   isLight: 0
   idleAnimation: {fileID: 0}

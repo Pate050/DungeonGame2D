@@ -14,6 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PropSprite: {fileID: -543638880, guid: e4ba82db16894524ba6bc6d0943d20a7, type: 3}
   PropSize: {x: 1, y: 1}
+  hasAnimation: 0
+  hasCollider: 1
+  health: 0
+  isLight: 0
+  idleAnimation: {fileID: 0}
   propType: treasure
   Corner: 0
   NearWallUP: 0
@@ -21,8 +26,3 @@ MonoBehaviour:
   NearWallRight: 0
   NearWallLeft: 0
   Inner: 1
-  PlacementQuantityMin: 1
-  PlacementQuantityMax: 1
-  PlaceAsGroup: 0
-  GroupMinCount: 1
-  GroupMaxCount: 1

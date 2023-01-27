@@ -17,9 +17,6 @@ public class PropPlacementManager : MonoBehaviour
 
     private RoomSettigns roomSettings = null;
 
-    [SerializeField, Range(0, 1)]
-    private float cornerPropPlacementChance = 0.2f;
-
     [SerializeField]
     private GameObject propPrefab;
 
@@ -87,6 +84,17 @@ public class PropPlacementManager : MonoBehaviour
             PlacePropOfType(room, treasureProps, treasureQuantity);
             PlacePropOfType(room, crateProps, crateQuantity);
             PlacePropOfType(room, torchProps, torchQuantity);
+            if (room.RoomType == "bossRoom")
+            {
+                foreach(Prop prop in propsToPlace)
+                {
+                    if (prop.name == "exit")
+                    {
+                        PlacePropGameObjectAt(room, room.RoomCenterPos, prop);
+                    }
+                }
+                
+            }
 
 
         }
@@ -141,57 +149,6 @@ public class PropPlacementManager : MonoBehaviour
     public void RunEvent()
     {
         OnFinished?.Invoke();
-    }
-
-    /// <summary>
-    /// Places props near walls. We need to specify the props anw the placement start point
-    /// </summary>
-    /// <param name="room"></param>
-    /// <param name="wallProps">Props that we should try to place</param>
-    /// <param name="availableTiles">Tiles that are near the specific wall</param>
-    /// <param name="placement">How to place bigger props. Ex near top wall we want to start placemt from the Top corner and find if there are free spaces below</param>
-    private void PlaceProps(
-        Room room, List<Prop> wallProps, HashSet<Vector2Int> availableTiles, PlacementOriginCorner placement)
-    {
-        //Remove path positions from the initial nearWallTiles to ensure the clear path to traverse dungeon
-        HashSet<Vector2Int> tempPositons = new HashSet<Vector2Int>(availableTiles);
-        tempPositons.ExceptWith(dungeonData.Path);
-
-        //We will try to place all the props
-        foreach (Prop propToPlace in wallProps)
-        {
-            //We want to place only certain quantity of each prop
-            string propType = propToPlace.propType;
-            int quantity = 0;
-            if (propType == "obstacle")
-            {
-                quantity
-                    = UnityEngine.Random.Range(roomSettings.ObstacleQuantityMin, roomSettings.ObstacleQuantityMax + 1);
-            }else if(propType == "crate")
-            {
-                quantity
-                    = UnityEngine.Random.Range(roomSettings.CrateQuantityMin, roomSettings.CrateQuantityMax + 1);
-            }
-            else if (propType == "treasure")
-            {
-                quantity
-                    = UnityEngine.Random.Range(roomSettings.TreasureQuantityMin, roomSettings.TreasureQuantityMax + 1);
-            }
-
-
-
-            for (int i = 0; i < quantity; i++)
-            {
-                //remove taken positions
-                tempPositons.ExceptWith(room.PropPositions);
-                //shuffel the positions
-                List<Vector2Int> availablePositions = tempPositons.OrderBy(x => Guid.NewGuid()).ToList();
-                //If placement has failed there is no point in trying to place the same prop again
-                if (TryPlacingPropBruteForce(room, propToPlace, availablePositions, placement) == false)
-                    break;
-            }
-
-        }
     }
 
     /// <summary>
@@ -309,36 +266,6 @@ public class PropPlacementManager : MonoBehaviour
         return freePositions;
     }
 
-    /// <summary>
-    /// Places props in the corners of the room
-    /// </summary>
-    /// <param name="room"></param>
-    /// <param name="cornerProps"></param>
-    private void PlaceCornerProps(Room room, List<Prop> cornerProps)
-    {
-        float tempChance = cornerPropPlacementChance;
-
-        foreach (Vector2Int cornerTile in room.CornerTiles)
-        {
-            if (UnityEngine.Random.value < tempChance)
-            {
-                Prop propToPlace
-                    = cornerProps[UnityEngine.Random.Range(0, cornerProps.Count)];
-
-                if (dungeonData.Path.Contains(cornerTile) == false && 
-                    propPlacements.Contains(cornerTile) == false)
-                {
-                    propPlacements.Add(cornerTile);
-                        PlacePropGameObjectAt(room, cornerTile, propToPlace);
-                }
-            }
-            else
-            {
-                //tempChance = Mathf.Clamp01(tempChance + 0.1f);
-            }
-        }
-    }
-
    
     /// <summary>
     /// Place a prop as a new GameObject at a specified position
@@ -356,19 +283,21 @@ public class PropPlacementManager : MonoBehaviour
 
         //set the sprite
         propSpriteRenderer.sprite = propToPlace.PropSprite;
-        
-        //Add a collider
-        CapsuleCollider2D collider
-            = propSpriteRenderer.gameObject.AddComponent<CapsuleCollider2D>();
-        collider.offset = Vector2.zero;
-        if (propToPlace.PropSize.x > propToPlace.PropSize.y)
-        {
-            collider.direction = CapsuleDirection2D.Horizontal;
-        }
-        Vector2 size
-            = new Vector2(propToPlace.PropSize.x * 0.8f, propToPlace.PropSize.y * 0.8f);
-        collider.size = size;
 
+        //Add a collider
+        if (propToPlace.hasCollider)
+        {
+            CapsuleCollider2D collider
+                = propSpriteRenderer.gameObject.AddComponent<CapsuleCollider2D>();
+            collider.offset = Vector2.zero;
+            if (propToPlace.PropSize.x > propToPlace.PropSize.y)
+            {
+                collider.direction = CapsuleDirection2D.Horizontal;
+            }
+            Vector2 size
+                = new Vector2(propToPlace.PropSize.x * 0.8f, propToPlace.PropSize.y * 0.8f);
+            collider.size = size;
+        }
         prop.transform.localPosition = (Vector2)placementPostion;
         //adjust the position to the sprite
         propSpriteRenderer.transform.localPosition
@@ -413,12 +342,11 @@ public class PropPlacementManager : MonoBehaviour
                 else
                 {
                     // Se on generoitunut v‰‰rin niin poistetaan sprite
-                    collider.enabled = false;
                     propSpriteRenderer.enabled = false;
+                    light.enabled = false;
                     return prop;
 
                 }
-                collider.enabled = false;
 
             }
             else if (propToPlace.name == "bossRoomTorch")
