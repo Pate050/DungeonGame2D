@@ -29,6 +29,7 @@ public class PropPlacementManager : MonoBehaviour
         dungeonData = FindObjectOfType<DungeonData>();
     }
 
+    // Asetetaan huoneisiin esineet huonetyypin mukaan
     public void ProcessRooms()
     {
         propPlacements = new HashSet<Vector2Int>();
@@ -47,7 +48,7 @@ public class PropPlacementManager : MonoBehaviour
                 continue;
             }
 
-            //Uutta
+            // Lajitellaan esineet tyypeitt‰in
             List<Prop> roomProps = roomSettings.propsToPlace;
             List<Prop> obstcleProps = new List<Prop>();
             List<Prop> crateProps = new List<Prop>();
@@ -72,6 +73,7 @@ public class PropPlacementManager : MonoBehaviour
                     torchProps.Add(prop);
                 }
             }
+            // Arvotaan esineiden m‰‰r‰t asetusten rajoissa
             int obstacleQuantity
                     = UnityEngine.Random.Range(roomSettings.ObstacleQuantityMin, roomSettings.ObstacleQuantityMax + 1);
             int crateQuantity
@@ -80,6 +82,8 @@ public class PropPlacementManager : MonoBehaviour
                     = UnityEngine.Random.Range(roomSettings.TreasureQuantityMin, roomSettings.TreasureQuantityMax + 1);
             int torchQuantity
                     = UnityEngine.Random.Range(roomSettings.TorchQuantityMin, roomSettings.TorchQuantityMax + 1);
+
+            // Asetetaan esineet j‰rjestyksess‰ huoneeseen
             PlacePropOfType(room, obstcleProps, obstacleQuantity);
             PlacePropOfType(room, treasureProps, treasureQuantity);
             PlacePropOfType(room, crateProps, crateQuantity);
@@ -104,6 +108,7 @@ public class PropPlacementManager : MonoBehaviour
 
     }
 
+    // Asetetaan haluttu m‰‰r‰ tietyn tyyppisi‰ esineit‰ huoneeseen
     private void PlacePropOfType(Room room, List<Prop> props, int quantity)
     {
         for (int i = 0; i < quantity; i++)
@@ -113,7 +118,10 @@ public class PropPlacementManager : MonoBehaviour
             {
                 continue;
             }
+            // Arvotaan esine
             Prop prop = props[UnityEngine.Random.Range(0, props.Count)];
+
+            // Listataan paikat joihin sen voi asettaa
             HashSet<Vector2Int> possiblePositions = new HashSet<Vector2Int>();
             if (prop.Corner)
             {
@@ -139,8 +147,11 @@ public class PropPlacementManager : MonoBehaviour
             {
                 possiblePositions.UnionWith(room.InnerTiles);
             }
+            // poistetaan paikat joissa on jo esine tai on riski tukkia kulkuv‰yl‰
             possiblePositions.ExceptWith(room.PropPositions);
             possiblePositions.ExceptWith(dungeonData.Path);
+
+            // Asetetaan esine satunnaiseen paikkaan vaihtoehdoista
             List<Vector2Int> availablePositions = possiblePositions.OrderBy(x => Guid.NewGuid()).ToList();
             TryPlacingPropBruteForce(room, prop, availablePositions, PlacementOriginCorner.BottomLeft);
         }

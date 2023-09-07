@@ -5,11 +5,13 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
+// j‰rkytt‰v‰‰ r‰pellyst‰ mutta kaikki toimii
 public class TilemapVisualizer : MonoBehaviour
 {
     [SerializeField]
     private Tilemap floorTilemap, wallTilemap;
     [SerializeField]
+    // ƒl‰ edes yrit‰ p‰‰telle nimist‰ mit‰‰n
     private TileBase wallTop, wallTopRight, wallLeftRightLeftRight, wallLeftRightLeft, wallRightRight, wallLeftRightRight, 
         wallTopLeft, wallTopBoth,wallLeftRight,wallLeftRightBottom,wallLeftRightTop, wallLeftLeft, wallUpDownLeft,
         wallSideRight, wallSideLeft, wallBottom, wallBottom2, wallFull, wallTopBottomRight, wallTopBottomLeft,

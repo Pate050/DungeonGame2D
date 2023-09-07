@@ -5,9 +5,12 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
+
+// Generoi Dungeonin niin ett‰ aluksi luodaan m‰‰r‰tty m‰‰r‰ halutun mittaisia k‰yt‰vi‰ 
+// ja sen j‰lkeen k‰yt‰vien risteyksiin luodaan satunnaisen mallisia huoneita
 public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
 {
-    // Parameters
+    // Parametrit
     [SerializeField]
     private int corridorLength = 14, corridorCount = 5;
     [SerializeField]
@@ -19,10 +22,7 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
     // Data
     private Dictionary<Vector2Int, HashSet<Vector2Int>> roomsDictionary
         = new Dictionary<Vector2Int, HashSet<Vector2Int>>();
-
     private HashSet<Vector2Int> floorPositions, corridorPositions;
-
-    // Uutta s‰hellyst‰
     public UnityEvent OnStartedGeneration;
     public UnityEvent OnFinishedRoomGeneration;
 
@@ -41,10 +41,11 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
         GenerateDungeon();
     }
 
-    // s‰hellys loppuu
     protected override void RunProceduralGeneration()
     {
         OnStartedGeneration?.Invoke();
+
+        // Luodaan objekti johon tallennetaan kaikki tarvittavat dungeonin tiedot
         dungeonData = FindObjectOfType<DungeonData>();
         if (dungeonData == null)
             dungeonData = gameObject.AddComponent<DungeonData>();
@@ -54,42 +55,33 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
 
     private void CorridorFirstGeneration()
     {
-        // s‰hellys
+        // Alustetaan data
         dungeonData.Reset();
 
         HashSet<Vector2Int> floorPositions = new HashSet<Vector2Int>();
         HashSet<Vector2Int> potentialRoomPositions = new HashSet<Vector2Int>();
 
+        // luodaan k‰yt‰v‰t
         CreateCorridors(floorPositions, potentialRoomPositions);
-
-        // s‰hellys
         dungeonData.Path.UnionWith(corridorPositions);
 
+        // luodaan huoneet
         HashSet<Vector2Int> roomPositions = CreateRooms(potentialRoomPositions);
-
         List<Vector2Int> deadEnds = FindAllDeadEnds(floorPositions);
-
         CreateRoomsAtDeadEnds(deadEnds, roomPositions);
 
+        // Tallennetaan lattian siainnit
         floorPositions.UnionWith(roomPositions);
         dungeonData.FloorTiles = floorPositions;
 
-        // ehk‰ turha
-        HashSet<Vector2Int> roomfloorNoCorridor = new HashSet<Vector2Int>();
-        foreach(Vector2Int tile in floorPositions)
-        {
-            if (corridorPositions.Contains(tile) == false)
-                roomfloorNoCorridor.Add(tile);
-        }
-        SetTitlesToRooms(roomTypeLabels);
-
+        // Piirret‰‰n lattia ja sein‰t
         tilemapVisualizer.PaintFloorTiles(floorPositions);
         WallGenerator.CreateWalls(floorPositions, tilemapVisualizer);
 
         OnFinishedRoomGeneration?.Invoke();
 
     }
-
+    // Luo huoneen jos huonetta ei viel‰ ole
     private void CreateRoomsAtDeadEnds(List<Vector2Int> deadEnds, HashSet<Vector2Int> roomFloors)
     {
         foreach(var position in deadEnds)
@@ -99,11 +91,13 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
                 var deadroom = RunRandomWalk(randomWalkParameters, position);
                 Room room = new Room(position, deadroom);
                 dungeonData.Rooms.Add(room);
+
+                SaveRoomData(position, deadroom);
                 roomFloors.UnionWith(deadroom);
             }
         }
     }
-
+    // Etsii k‰yt‰vien p‰‰dyt
     private List<Vector2Int> FindAllDeadEnds(HashSet<Vector2Int> floorPositions)
     {
         List<Vector2Int> deadEnds = new List<Vector2Int>();
@@ -120,7 +114,7 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
         }
         return deadEnds;
     }
-
+    // Palauttaa listan huoneiden lattioiden sijainneista
     private HashSet<Vector2Int> CreateRooms(HashSet<Vector2Int> potentialRoomPositions)
     {
         HashSet<Vector2Int> roomPositions = new HashSet<Vector2Int>();
@@ -133,26 +127,19 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
         {
             var roomfloor = RunRandomWalk(randomWalkParameters, roomPosition);
 
-            //s‰hellys
             Room room = new Room(roomPosition, roomfloor);
             dungeonData.Rooms.Add(room);
-
             SaveRoomData(roomPosition, roomfloor);
             roomPositions.UnionWith(roomfloor);
         }
         return roomPositions;
     }
 
-    private void ClearRoomData()
-    {
-        roomsDictionary.Clear();
-    }
-
     private void SaveRoomData(Vector2Int roomPosition, HashSet<Vector2Int> roomfloor)
     {
         roomsDictionary[roomPosition] = roomfloor;
     }
-
+    // Luodaan k‰yt‰v‰t ja otetaan ylˆs potentiaaliset huoneiden paikat
     private void CreateCorridors(HashSet<Vector2Int> floorPositions,
                                  HashSet<Vector2Int> potentialRoomPositions)
     {
@@ -170,11 +157,9 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
         corridorPositions = new HashSet<Vector2Int>(floorPositions);
     }
 
-    // Palauttaa lyhimm‰n reitin ruudut jonona jossa viimeinen ruutu on haluttu maali
+    // Palauttaa maalien siainnit j‰rjestyksess‰ l‰himm‰st‰ kauimpaan
     public List<Vector2Int> FloodFill(HashSet<Vector2Int> goalPositions, Vector2Int start)
     {
-        Dictionary<Vector2Int, Vector2Int> nextTileToGoal = 
-            new Dictionary<Vector2Int, Vector2Int>();
         Queue<Vector2Int> frontier = new Queue<Vector2Int>();
         List<Vector2Int> visited = new List<Vector2Int>();
         List<Vector2Int> goalsVisited = new List<Vector2Int>();
@@ -190,7 +175,6 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
                     dungeonData.FloorTiles.Contains(neighbour))
                 {
                     frontier.Enqueue(neighbour);
-                    nextTileToGoal[neighbour] = curTile;
                 }
             }
             visited.Add(curTile);
@@ -203,6 +187,7 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
         return goalsVisited;
     }
 
+    // Palauttaa nelj‰ viereist‰ koordinaattia 
     public List<Vector2Int> Get4Neighbours(Vector2Int coordinate)
     {
         List<Vector2Int> neighbours4directions = new List<Vector2Int>
@@ -213,9 +198,10 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
         return neighbours4directions;
     }
 
+    // Otsikoidaan huoneet jotta tiedet‰‰n mist‰ aloitetaan ja miss‰ on maali
     public void SetTitlesToRooms(List<string> titles)
     {
-        // Arvotaan aloitus huone
+        // Arvotaan aloitus huone ja merkit‰‰n nimell‰ "playerStart"
         int startRoomNum = UnityEngine.Random.Range(0, dungeonData.Rooms.Count);
         dungeonData.Rooms[startRoomNum].RoomType = "playerStart";
         dungeonData.PlayerStart = dungeonData.Rooms[startRoomNum].RoomCenterPos;
@@ -236,7 +222,7 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
         List<Vector2Int> roomsSortedByDistance = FloodFill(centers,
             dungeonData.Rooms[startRoomNum].RoomCenterPos);
 
-        // Tehd‰‰n listasta jono
+        // Jono halutuista huoneista kauimmaÌnen ensimm‰isen‰
         Queue<string> jono = new Queue<string>();
         foreach(string title in titles)
         {
@@ -253,7 +239,7 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
             }
         }
 
-        // Loput huoneet merkit‰‰n t‰gill‰ "enemyRoom"
+        // Loput huoneet merkit‰‰n nimell‰ "enemyRoom"
         for (int i = 0; i < dungeonData.Rooms.Count; i++)
         {
             Room room = dungeonData.Rooms[i];
