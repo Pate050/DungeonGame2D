@@ -78,6 +78,9 @@ public class CorridorFirstDungeonGenerator : SimpleRandomDungeonGenerator
         tilemapVisualizer.PaintFloorTiles(floorPositions);
         WallGenerator.CreateWalls(floorPositions, tilemapVisualizer);
 
+        // Otsikoidaan huoneet
+        SetTitlesToRooms(roomTypeLabels);
+
         OnFinishedRoomGeneration?.Invoke();
 
     }
